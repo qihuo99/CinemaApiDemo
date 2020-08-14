@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj": {}
+    "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web_API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj": {}
   },
   "projects": {
-    "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj": {
+    "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web_API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj",
+        "projectUniqueName": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web_API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj",
         "projectName": "CinemaApiDemo",
-        "projectPath": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj",
+        "projectPath": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web_API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\CinemaApiDemo.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\obj\\",
+        "outputPath": "D:\\ITProjects\\UdemyProject\\ASP.NET\\Web_API\\Core5_2020\\CinemaApiDemo\\CinemaApiDemo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
