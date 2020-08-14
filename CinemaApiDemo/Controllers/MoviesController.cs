@@ -12,7 +12,7 @@ namespace CinemaApiDemo.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private List<Movie> movies = new List<Movie>
+        private static List<Movie> movies = new List<Movie>
         {
             new Movie(){ Id=1, Name="Mission Impossible 7",  Language="English"},
             new Movie(){ Id=2, Name="The Matrix 4",  Language="English"},
@@ -23,6 +23,19 @@ namespace CinemaApiDemo.Controllers
         public IEnumerable<Movie> Get() 
         {
             return movies;
+        }
+
+        [HttpPost]
+        public void Post([FromBody] Movie movie)
+        {
+            movies.Add(movie);
+
+            //This is the valid json format to test in Postman for Post() method
+            //{
+            //   "Id":7,
+            //   "Name":"Fast 9",
+            //   "Language":"English"
+            //}
         }
 
 
