@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaApiDemo.Data;
 using CinemaApiDemo.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CinemaApiDemo.Controllers
 {
@@ -12,32 +14,61 @@ namespace CinemaApiDemo.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private static List<Movie> movies = new List<Movie>
-        {
-            new Movie(){ Id=1, Name="Mission Impossible 7",  Language="English"},
-            new Movie(){ Id=2, Name="The Matrix 4",  Language="English"},
-            new Movie(){ Id=3, Name="Patriot Game",  Language="English"}
-        };
+        private CinemaDBContext _dbContext;
 
-        [HttpGet]  //Once the web request is send, the httpget will execute the Get() method
-        public IEnumerable<Movie> Get() 
+        public MoviesController(CinemaDBContext dbContext)
         {
-            return movies;
+            _dbContext = dbContext;
+
         }
 
-        [HttpPost]
-        public void Post([FromBody] Movie movie)
+        // GET: api/<MoviesController>
+        [HttpGet]
+        public IEnumerable<Movie> Get()
         {
-            movies.Add(movie);
 
-            //This is the valid json format to test in Postman for Post() method
+            return _dbContext.Movies;
+        }
+
+        // GET api/<MoviesController>/5
+        [HttpGet("{id}")]
+        public Movie Get(int id)
+        { 
+            var movie = _dbContext.Movies.Find(id);
+            return movie;
+        }
+
+        // POST api/<MoviesController>
+        [HttpPost]
+        public void Post([FromBody] Movie movieObj)
+        {
+            _dbContext.Movies.Add(movieObj);
+            _dbContext.SaveChanges();
+
+            //this is the json format
             //{
-            //   "Id":7,
-            //   "Name":"Fast 9",
-            //   "Language":"English"
+            //    "Name":"The Speedy 2",
+            //    "Language":"English"
             //}
         }
 
+        // PUT api/<MoviesController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] Movie movieObj)
+        {
+            var movie = _dbContext.Movies.Find(id);
+            movie.Name = movieObj.Name;
+            movie.Language = movieObj.Language;
+            _dbContext.SaveChanges();
+        }
 
+        // DELETE api/<MoviesController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            var movie = _dbContext.Movies.Find(id);
+            _dbContext.Movies.Remove(movie);
+            _dbContext.SaveChanges();
+        }
     }
 }

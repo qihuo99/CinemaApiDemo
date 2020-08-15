@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaApiDemo.Data;
+using CinemaApiDemo.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,10 +29,11 @@ namespace CinemaApiDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<CinemaDBContext>(option => option. UseSqlServer(@"Data Source=DESKTOP-QG2IREP\SQLEXPRESS2017;Initial Catalog=CinemaDB;Integrated Security=true;"));   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CinemaDBContext dBContext)
         {
             if (env.IsDevelopment())
             {
@@ -41,6 +45,10 @@ namespace CinemaApiDemo
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //Use EnsureCreated only if you 
+            //don't want to do any more update in DB
+            dBContext.Database.EnsureCreated();
 
             app.UseEndpoints(endpoints =>
             {
