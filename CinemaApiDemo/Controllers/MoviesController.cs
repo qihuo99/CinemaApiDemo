@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CinemaApiDemo.Data;
 using CinemaApiDemo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,15 +41,17 @@ namespace CinemaApiDemo.Controllers
 
         // POST api/<MoviesController>
         [HttpPost]
-        public void Post([FromBody] Movie movieObj)
+        public IActionResult Post([FromBody] Movie movieObj)
         {
             _dbContext.Movies.Add(movieObj);
             _dbContext.SaveChanges();
-
+            return StatusCode(StatusCodes.Status201Created);
+           
             //this is the json format
             //{
             //    "Name":"The Speedy 2",
-            //    "Language":"English"
+            //    "Language":"English",
+            //    "Rating": 6,
             //}
         }
 
@@ -59,6 +62,7 @@ namespace CinemaApiDemo.Controllers
             var movie = _dbContext.Movies.Find(id);
             movie.Name = movieObj.Name;
             movie.Language = movieObj.Language;
+            movie.Rating = movieObj.Rating;
             _dbContext.SaveChanges();
         }
 

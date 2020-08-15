@@ -29,11 +29,12 @@ namespace CinemaApiDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc().AddXmlSerializerFormatters();//add xml option on top of json
             services.AddDbContext<CinemaDBContext>(option => option. UseSqlServer(@"Data Source=DESKTOP-QG2IREP\SQLEXPRESS2017;Initial Catalog=CinemaDB;Integrated Security=true;"));   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CinemaDBContext dBContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -48,7 +49,10 @@ namespace CinemaApiDemo
 
             //Use EnsureCreated only if you 
             //don't want to do any more update in DB
-            dBContext.Database.EnsureCreated();
+            //comment this out since we need to update db schema
+            //dBContext.Database.EnsureCreated();
+
+
 
             app.UseEndpoints(endpoints =>
             {
