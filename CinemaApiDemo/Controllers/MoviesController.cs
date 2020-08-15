@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CinemaApiDemo.Data;
@@ -39,40 +40,85 @@ namespace CinemaApiDemo.Controllers
             return movie;
         }
 
-        // POST api/<MoviesController>
+        //// POST api/<MoviesController>
+        //[HttpPost]
+        //public IActionResult Post([FromBody] Movie movieObj)
+        //{
+        //    _dbContext.Movies.Add(movieObj);
+        //    _dbContext.SaveChanges();
+        //    return StatusCode(StatusCodes.Status201Created);
+           
+        //    //this is the json format
+        //    //{
+        //    //    "Name":"The Speedy 2",
+        //    //    "Language":"English",
+        //    //    "Rating": 6,
+        //    //}
+        //}
+
         [HttpPost]
-        public IActionResult Post([FromBody] Movie movieObj)
+        public IActionResult Post([FromForm] Movie movieObj)
         {
+            //generate a new unique image id to avoid duplicate
+            var guid = Guid.NewGuid();
+            var filePath = Path.Combine("wwwroot\\image", guid+".jpg");
+            if (movieObj.Image != null) 
+            {
+                var fileStream = new FileStream(filePath, FileMode.Create);
+                movieObj.Image.CopyTo(fileStream); //save the image file url
+            }
+            movieObj.ImageUrl = filePath.Remove(0,7); //remove wwwroot
             _dbContext.Movies.Add(movieObj);
             _dbContext.SaveChanges();
-            return StatusCode(StatusCodes.Status201Created);
-           
-            //this is the json format
-            //{
-            //    "Name":"The Speedy 2",
-            //    "Language":"English",
-            //    "Rating": 6,
-            //}
+
+            return Ok();
         }
 
         // PUT api/<MoviesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Movie movieObj)
+        public IActionResult Put(int id, [FromForm] Movie movieObj)
         {
             var movie = _dbContext.Movies.Find(id);
-            movie.Name = movieObj.Name;
-            movie.Language = movieObj.Language;
-            movie.Rating = movieObj.Rating;
-            _dbContext.SaveChanges();
+            if (movie == null)
+            {
+                return NotFound("No Record Found for this Id!");
+            }
+            else
+            {
+                var guid = Guid.NewGuid();
+                var filePath = Path.Combine("wwwroot\\image", guid + ".jpg");
+                if (movieObj.Image != null)
+                {
+                    var fileStream = new FileStream(filePath, FileMode.Create);
+                    movieObj.Image.CopyTo(fileStream); //save the image file url
+                    movieObj.ImageUrl = filePath.Remove(0, 7); //remove wwwroot
+                }
+
+                movie.Name = movieObj.Name;
+                movie.Language = movieObj.Language;
+                movie.Rating = movieObj.Rating;
+                movie.ImageUrl = movieObj.ImageUrl;
+                _dbContext.SaveChanges();
+                return Ok("Record updated successfully!");    //return success code with message
+            }
         }
 
         // DELETE api/<MoviesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             var movie = _dbContext.Movies.Find(id);
-            _dbContext.Movies.Remove(movie);
-            _dbContext.SaveChanges();
+            if (movie == null)
+            {
+                return NotFound("No Record Found for this Id!");
+            }
+            else
+            {
+                _dbContext.Movies.Remove(movie);
+                _dbContext.SaveChanges();
+                return Ok("Record deleted successfully!");
+            }
         }
+
     }
 }

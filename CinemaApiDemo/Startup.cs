@@ -40,7 +40,7 @@ namespace CinemaApiDemo
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseStaticFiles();//get access to wwwroot folder for Middleware functions
             app.UseHttpsRedirection();
 
             app.UseRouting();
