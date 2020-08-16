@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using CinemaApiDemo.Data;
 using CinemaApiDemo.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,11 @@ namespace CinemaApiDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class MoviesFuntionDemoController : ControllerBase
     {
         private CinemaDBContext _dbContext;
 
-        public MoviesController(CinemaDBContext dbContext)
+        public MoviesFuntionDemoController(CinemaDBContext dbContext)
         {
             _dbContext = dbContext;
 
@@ -32,7 +34,7 @@ namespace CinemaApiDemo.Controllers
         // GET api/<MoviesController>/5
         [HttpGet("{id}")]
         public Movie Get(int id)
-        { 
+        {
             var movie = _dbContext.Movies.Find(id);
             return movie;
         }
@@ -67,13 +69,13 @@ namespace CinemaApiDemo.Controllers
         {
             //generate a new unique image id to avoid duplicate
             var guid = Guid.NewGuid();
-            var filePath = Path.Combine("wwwroot\\image", guid+".jpg");
-            if (movieObj.Image != null) 
+            var filePath = Path.Combine("wwwroot\\image", guid + ".jpg");
+            if (movieObj.Image != null)
             {
                 var fileStream = new FileStream(filePath, FileMode.Create);
                 movieObj.Image.CopyTo(fileStream); //save the image file url
             }
-            movieObj.ImageUrl = filePath.Remove(0,7); //remove wwwroot
+            movieObj.ImageUrl = filePath.Remove(0, 7); //remove wwwroot
             _dbContext.Movies.Add(movieObj);
             _dbContext.SaveChanges();
 
