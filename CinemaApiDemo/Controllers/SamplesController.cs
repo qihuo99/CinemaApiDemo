@@ -15,6 +15,7 @@ namespace CinemaApiDemo.Controllers
         //how to protect routes from being easily hacked.
 
         // GET: api/<SamplesController>
+        [Authorize(Roles = "Users")]
         [HttpGet]
         public string Get()
         {
