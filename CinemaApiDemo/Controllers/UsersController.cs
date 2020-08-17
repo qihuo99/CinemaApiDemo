@@ -61,10 +61,12 @@ namespace CinemaApiDemo.Controllers
             {
                 return Unauthorized();
             }
+            //if login a user with admin role, will return admin token
             var claims = new[]
             {
                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                new Claim(ClaimTypes.Email, user.Email),
+               new Claim(ClaimTypes.Role, userEmail.Role),//get the role value from db
              };
              //this line will generate access token
              var token = _auth.GenerateAccessToken(claims);

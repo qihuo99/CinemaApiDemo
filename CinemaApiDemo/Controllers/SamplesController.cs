@@ -16,16 +16,20 @@ namespace CinemaApiDemo.Controllers
 
         // GET: api/<SamplesController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            return "Hello From the User Side";
+            //return new string[] { "value1", "value2" };
         }
 
-        // GET api/<SamplesController>/5
+        //By default, only the first Get method will be accessed
+        //Thus, we need to specify a particular Authorize method here
+        [Authorize(Roles = "Admin")]
+        // GET api/<SamplesController>/3
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            return "Hello From the Admin Side";
         }
 
         // POST api/<SamplesController>
