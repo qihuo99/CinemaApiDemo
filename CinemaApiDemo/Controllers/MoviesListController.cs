@@ -23,8 +23,12 @@ namespace CinemaApiDemo.Controllers
         // GET: api/<MoviesController>
         [Authorize]
         [HttpGet("[action]")]
-        public IActionResult AllMovies()
+        public IActionResult AllMovies(string sort, int? pageNumber, int? pageSize)
         {
+            //if pageNumber & pageSize are not null, take the passing parameters values
+            //otherwise, take the default values 1 & 5 specified as below
+            var currentPageNumber = pageNumber ?? 1;
+            var currentPageSize = pageSize ?? 5;
             //Since below is LINQ, need to import System.LINQ class
             var movies = from movie in _dbContext.Movies
             select new
@@ -37,7 +41,16 @@ namespace CinemaApiDemo.Controllers
                 Genre = movie.Genre,
                 ImageUrl = movie.ImageUrl
             };
-            return Ok(movies);
+            ///api/MoviesList/AllMovies?pageNumber=2&pageSize=2  use local url like this
+            switch (sort) //sorting in asc or desc order
+            {
+                case "desc":
+                    return Ok(movies.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize).OrderByDescending(m=>m.Rating));
+                case "asc":
+                    return Ok(movies.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize).OrderBy(m => m.Rating));
+                default:  //Do pagination
+                    return Ok(movies.Skip((currentPageNumber - 1)* currentPageSize).Take(currentPageSize));
+            }
 
             //use this approach only if you want to return all fields
             //var allMovies = _dbContext.Movies;
@@ -57,6 +70,23 @@ namespace CinemaApiDemo.Controllers
                 return NotFound();
             }
             return Ok(movie);
+        }
+
+        //this is for searching a particular movie by name
+        //use api/MoviesList/FindMovies?movieName=MissionImpossible
+        [Authorize]
+        [HttpGet("[action]")] //customized method needs to add action token here
+        public IActionResult FindMovies(string movieName)
+        {
+            var movies = from movie in _dbContext.Movies
+                         where movie.Name.StartsWith(movieName)
+                         select new
+                         {   //only Id, Name, and ImageUrl are good enough
+                             Id = movie.Id,
+                             Name = movie.Name,
+                             ImageUrl = movie.ImageUrl
+                         };
+            return Ok(movies);
         }
 
         [Authorize(Roles = "Admin")] //adding a movie only by admin user
